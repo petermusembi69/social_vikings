@@ -114,7 +114,7 @@ class _LearnViewState extends State<LearnView>
                 FractionallySizedBox(
                   widthFactor: 0.6,
                   child: Container(
-                    height: kToolbarHeight * 2,
+                    height: kToolbarHeight * 1.8,
                     child: Padding(
                       padding: EdgeInsets.only(
                         top: Adapt.px(20),

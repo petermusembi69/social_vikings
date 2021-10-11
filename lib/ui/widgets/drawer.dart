@@ -37,7 +37,8 @@ class _DrawerDataState extends State<DrawerData> {
       DrawerItem('logOut', Icons.exit_to_app, () async {
         await locator<AuthService>().signOut();
         locator<HiveService>().clearPrefs();
-        Navigator.pushReplacementNamed(context, AppRouter.intialRoute);
+        Navigator.pop(context);
+        Navigator.pushNamed(context, AppRouter.intialRoute);
       }),
     ];
     return Padding(

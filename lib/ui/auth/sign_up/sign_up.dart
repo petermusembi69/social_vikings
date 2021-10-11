@@ -146,7 +146,7 @@ class _SignUpViewState extends State<SignUpView> {
                             filled: true,
                             fillColor: Colors.white,
                             hintText: 'example@gmail.com',
-                            hintStyle: TextStyles.createShopPlaceHolderStyle,
+                            hintStyle: TextStyles.medium,
                             contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 20, vertical: 5),
                           ),
@@ -189,7 +189,7 @@ class _SignUpViewState extends State<SignUpView> {
                             filled: true,
                             fillColor: Colors.white,
                             hintText: 'password',
-                            hintStyle: TextStyles.createShopPlaceHolderStyle,
+                            hintStyle: TextStyles.medium,
                             contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 20, vertical: 5),
                           ),
@@ -330,15 +330,21 @@ class _SignUpViewState extends State<SignUpView> {
                                     style: TextStyles.subHeading,
                                   ),
                                 ]),
-                            loading: () => SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                backgroundColor:
-                                    AppTheme.appTheme(context).greyWeak,
-                              ),
-                            ),
+                            loading: () =>  Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'images/google.png',
+                                    height: Adapt.px(32),
+                                  ),
+                                  SizedBox(
+                                    width: Adapt.px(20),
+                                  ),
+                                  Text(
+                                    'Google Sign In',
+                                    style: TextStyles.subHeading,
+                                  ),
+                                ]),
                             loaded: () => Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [

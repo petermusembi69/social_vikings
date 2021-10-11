@@ -13,7 +13,7 @@ class _DecisionPageState extends State<DecisionPage> {
   void _redirectToPage(BuildContext context, {required String routeName}) {
     WidgetsBinding.instance!.addPostFrameCallback(
       (_) {
-        Navigator.pushNamed(
+        Navigator.popAndPushNamed(
           context,
           routeName,
         );
