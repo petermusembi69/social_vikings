@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:soc/services/_index.dart';
-import 'package:soc/ui/auth/sign_in/sign_in.dart';
-import 'package:soc/ui/learn/learn.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:soc/utils/_index.dart';
-
 
 class DecisionPage extends StatefulWidget {
   const DecisionPage({Key? key}) : super(key: key);
@@ -13,17 +10,54 @@ class DecisionPage extends StatefulWidget {
 }
 
 class _DecisionPageState extends State<DecisionPage> {
+  void _redirectToPage(BuildContext context, {required String routeName}) {
+    WidgetsBinding.instance!.addPostFrameCallback(
+      (_) {
+        Navigator.pushNamed(
+          context,
+          routeName,
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<String>(
-        stream: locator<AuthService>().authenticatedUID,
-        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          if (snapshot.connectionState == ConnectionState.active) {
-            final isLoggedIn = snapshot.hasData;
-            return isLoggedIn ? const LearnPage() : const SignInPage();
-          } else {
-            return const SignInPage();
-          }
-        });
+    final themeData = Theme.of(context);
+    Adapt.initContext(context);
+    TextStyles.initContext(context);
+    return ValueListenableBuilder(
+      valueListenable:
+          Hive.box(SocialAppConfig.instance!.values.authBox).listenable(),
+      builder: (context, Box box, _) {
+        final _accToken = box.get('accessToken');
+        if (_accToken == null) {
+          _redirectToPage(
+            context,
+            routeName: AppRouter.logInRoute,
+          );
+        } else {
+          _redirectToPage(
+            context,
+            routeName: AppRouter.learnRoute,
+          );
+        }
+        return Scaffold(
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                child: Text(
+                  'Social App',
+                  style: themeData.textTheme.headline6!.copyWith(
+                    color: AppTheme.appTheme(context).accent1Dark,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
