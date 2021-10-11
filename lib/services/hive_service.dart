@@ -18,7 +18,7 @@ class HiveServiceImpl implements HiveService {
   @override
   void clearPrefs() {
     Hive.box<dynamic>(SocialAppConfig.instance!.values.authBox)
-        .deleteAll(<String>['accessToken', 'accessToken']);
+        .deleteAll(<String>['accessToken']);
   }
 
   @override
