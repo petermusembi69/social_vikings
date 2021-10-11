@@ -11,11 +11,14 @@ part 'sign_in_cubit.freezed.dart';
 class SignInCubit extends Cubit<SignInState> {
   SignInCubit({
     required AuthService authService,
+    required HiveService hiveService,
   }) : super(const SignInState.initial()) {
     _authService = authService;
+    _hiveService = hiveService;
   }
 
   late AuthService _authService;
+  late HiveService _hiveService;
 
   Future<void> signIn({
     required String email,
@@ -23,7 +26,6 @@ class SignInCubit extends Cubit<SignInState> {
   }) async {
     emit(const SignInState.loading());
     try {
-      Logger().e('jjij');
       final dynamic _result = await _authService.signInWithEmailAndPassword(
         SignInDTO(
           email: email,
@@ -31,12 +33,30 @@ class SignInCubit extends Cubit<SignInState> {
         ),
       );
       if (_result is User) {
+        _hiveService.persistToken(_result.uid);
         emit(const SignInState.loaded());
       } else if (_result is String) {
         emit(SignInState.error(_result));
       }
     } catch (e) {
       emit(const SignInState.error('Login Failed!'));
+    }
+  }
+
+  Future<void> signInwithGoogle() async {
+    try {
+      final dynamic _result = await _authService.signInWithGoogle();
+      Logger().d(_result);
+      if (_result is User) {
+        _hiveService.persistToken(_result.uid);
+        emit(const SignInState.loaded());
+      } else if (_result is String) {
+        emit(SignInState.error(_result));
+      }
+    } catch (e) {
+      Logger().d(e.toString());
+
+      emit(const SignInState.error('Sign in Failed!'));
     }
   }
 

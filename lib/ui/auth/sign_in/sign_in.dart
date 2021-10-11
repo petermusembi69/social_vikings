@@ -75,6 +75,7 @@ class _SignInViewState extends State<SignInView> {
         loading: () {},
         loaded: () {
           FocusScope.of(context).unfocus();
+          Navigator.pushReplacementNamed(context, AppRouter.learnRoute);
           locator<SignInCubit>().reset();
         },
         error: (error) {
@@ -258,7 +259,7 @@ class _SignInViewState extends State<SignInView> {
                     ),
                     Padding(
                       padding: EdgeInsets.only(
-                        top: Adapt.px(40),
+                        top: Adapt.px(30),
                         left: Adapt.px(30),
                         right: Adapt.px(30),
                       ),
@@ -285,6 +286,98 @@ class _SignInViewState extends State<SignInView> {
                                 ),
                               ),
                             ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: Adapt.px(40),
+                        bottom: Adapt.px(30),
+                        left: Adapt.px(30),
+                        right: Adapt.px(30),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'or',
+                          style: TextStyle(
+                            color: AppTheme.appTheme(context).quickSilver,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: Adapt.px(30),
+                        right: Adapt.px(30),
+                      ),
+                      child: MaterialButton(
+                        onPressed: () {
+                          FocusScope.of(context).unfocus();
+                          locator<SignInCubit>().signInwithGoogle();
+                        },
+                        color: AppTheme.appTheme(context).bg1,
+                        minWidth: double.infinity,
+                        height: Adapt.px(90),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(11),
+                        ),
+                        child: BlocBuilder<SignInCubit, SignInState>(
+                          builder: (context, state) => state.when(
+                            initial: () => Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'images/google.png',
+                                    height: Adapt.px(32),
+                                  ),
+                                  SizedBox(
+                                    width: Adapt.px(20),
+                                  ),
+                                  Text(
+                                    'Google Sign In',
+                                    style: TextStyles.subHeading,
+                                  ),
+                                ]),
+                            loading: () => SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                backgroundColor:
+                                    AppTheme.appTheme(context).greyWeak,
+                              ),
+                            ),
+                            loaded: () => Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'images/google.png',
+                                    height: Adapt.px(32),
+                                  ),
+                                  SizedBox(
+                                    width: Adapt.px(20),
+                                  ),
+                                  Text(
+                                    'Google Sign In',
+                                    style: TextStyles.subHeading,
+                                  ),
+                                ]),
+                            error: (err) => Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'images/google.png',
+                                    height: Adapt.px(32),
+                                  ),
+                                  SizedBox(
+                                    width: Adapt.px(20),
+                                  ),
+                                  Text(
+                                    'Google Sign In',
+                                    style: TextStyles.subHeading,
+                                  ),
+                                ]),
                           ),
                         ),
                       ),

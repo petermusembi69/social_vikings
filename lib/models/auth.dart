@@ -10,5 +10,3 @@ class SignInDTO with _$SignInDTO {
   factory SignInDTO.fromJson(Map<String, dynamic> json) =>
       _$SignInDTOFromJson(json);
 }
-
-}

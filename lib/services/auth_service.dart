@@ -1,62 +1,43 @@
 part of social_services;
 
 abstract class AuthService {
-  // Future<FirebaseUser> signInWithGoogle();
+  Future<dynamic> signInWithGoogle();
   Future<void> signOut();
-  // Future<bool> isSignedIn();
   Future<dynamic> createUserWithEmailAndPassword(SignInDTO signInDTO);
   Future<dynamic> signInWithEmailAndPassword(SignInDTO signInDTO);
-  Stream<String> get authenticatedUID;
 }
 
 class AuthServiceImpl implements AuthService {
   final _firebaseAuth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-  // @override
-  // Future<FirebaseUser> signInWithGoogle() async {
-  //   final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-  //   final GoogleSignInAuthentication googleAuth =
-  //       await googleUser.authentication;
-  //   final AuthCredential credential = GoogleAuthProvider.getCredential(
-  //     accessToken: googleAuth.accessToken,
-  //     idToken: googleAuth.idToken,
-  //   );
-  //   await _firebaseAuth.signInWithCredential(credential);
-  //   print((await _firebaseAuth.currentUser()).providerData);
-  //   return _firebaseAuth.currentUser();
-  // }
+  @override
+  Future<dynamic> signInWithGoogle() async {
+    final googleSignInAccount = await _googleSignIn.signIn();
+    final googleSignInAuthentication =
+        await googleSignInAccount?.authentication;
+
+    final AuthCredential credential = GoogleAuthProvider.credential(
+      idToken: googleSignInAuthentication?.idToken,
+      accessToken: googleSignInAuthentication?.accessToken,
+    );
+
+    final authResult = await _firebaseAuth.signInWithCredential(credential);
+    final _user = authResult.user;
+    if (_user != null) {
+      Logger().e(_user);
+      assert(!_user.isAnonymous);
+      return Future.value(
+        _user,
+      );
+    } else {
+      return 'An error occured';
+    }
+  }
 
   @override
   Future<void> signOut() async {
-    return Future.value(
-      _firebaseAuth.signOut(),
-    );
-  }
-
-  @override
-  Stream<String> get authenticatedUID {
-    return _firebaseAuth
-        .authStateChanges()
-        .map((event) => event!.uid)
-        .asBroadcastStream();
-  }
-
-  Future<UserCredential?> signInWithGoogle() async {
-    final googleUser = await GoogleSignIn().signIn();
-
-    if (googleUser != null) {
-      final googleAuth = await googleUser.authentication;
-
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-
-      return Future.value(
-          FirebaseAuth.instance.signInWithCredential(credential));
-    } else {
-      return null;
-    }
+    return Future.value([_firebaseAuth.signOut(), _googleSignIn.signOut()]);
   }
 
   @override
@@ -67,10 +48,12 @@ class AuthServiceImpl implements AuthService {
         email: signInDTO.email,
         password: signInDTO.password,
       );
-      if (userCredential.user!.emailVerified) {
+      if (userCredential.user != null) {
         return userCredential.user;
       }
     } on FirebaseAuthException catch (e) {
+      Logger().e(e.toString());
+
       if (e.code == 'user-not-found') {
         return 'No user found for that email.';
       } else if (e.code == 'wrong-password') {
