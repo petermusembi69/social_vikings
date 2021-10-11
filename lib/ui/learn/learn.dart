@@ -1,12 +1,7 @@
-//
-// Work in progress
-//
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:soc/ui/widgets/drawer.dart';
+import 'package:soc/ui/widgets/drawer_wrapper.dart';
 import 'package:soc/ui/widgets/learning_content.dart';
 import 'package:soc/utils/_index.dart';
 
@@ -65,23 +60,23 @@ class _LearnViewState extends State<LearnView>
 
   final segmentTitle = <int, Widget>{
     0: Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 40),
       child: Text(
         'Documents',
-        style: TextStyles.tabStyle,
+        style: TextStyles.subHeading,
       ),
     ),
     1: Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 40),
       child: Text(
         'Videos',
-        style: TextStyles.tabStyle,
+        style: TextStyles.subHeading,
       ),
     ),
   };
 
   final children = <int, Widget>{
-    0: ListView.builder(
+    1: ListView.builder(
         itemCount: 4,
         itemBuilder: (BuildContext context, int index) {
           return Card(
@@ -97,49 +92,72 @@ class _LearnViewState extends State<LearnView>
                     widthFactor: 0.4,
                     child: Padding(
                       padding: EdgeInsets.all(Adapt.px(20)),
-                      child: Placeholder(
-                        color: Colors.black,
-                        fallbackHeight: Adapt.screenH() * 0.15,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12.withOpacity(0.05),
+                                spreadRadius: 0.5,
+                                blurRadius: 6,
+                                offset: Offset(2, 6),
+                              ),
+                            ]),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                          child: Image.asset(
+                            'images/videoimage.png',
+                          ),
+                        ),
                       ),
                     )),
                 FractionallySizedBox(
                   widthFactor: 0.6,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      top: Adapt.px(20),
-                      bottom: Adapt.px(20),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          title[index],
-                          style: TextStyles.cardStyle.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: AppTheme.appTheme(context).txt,
+                  child: Container(
+                    height: kToolbarHeight * 2,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        top: Adapt.px(20),
+                        bottom: Adapt.px(20),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            title[index],
+                            style: TextStyles.subHeading,
+                            softWrap: true,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          softWrap: true,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          'Brass bringing joy into surgical training. This concept is derived from',
-                          style: TextStyles.cardStyle.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: AppTheme.appTheme(context).midGrey,
+                          Spacer(),
+                          Text(
+                            'Brass bringing joy into surgical training. This concept is derived from',
+                            style: TextStyles.medium,
+                            softWrap: true,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          softWrap: true,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          '19m 15s',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: AppTheme.appTheme(context).txt,
+                          Spacer(),
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.watch_later,
+                                color: Colors.black,
+                                size: Adapt.px(28),
+                              ),
+                              SizedBox(
+                                width: Adapt.px(4),
+                              ),
+                              Text(
+                                '19m 15s',
+                                style: TextStyles.standard,
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -147,14 +165,14 @@ class _LearnViewState extends State<LearnView>
             ),
           );
         }),
-    1: Center(
+    0: Center(
       child: Text(
         'Videos',
         style: TextStyles.tabStyle,
       ),
     )
   };
-  int currentSegment = 0;
+  int currentSegment = 1;
   void onValueChanged(int? value) {
     setState(() {
       currentSegment = value!;
@@ -163,114 +181,86 @@ class _LearnViewState extends State<LearnView>
 
   @override
   Widget build(BuildContext context) {
-    final leftSlide = MediaQuery.of(context).size.width * 0.6;
-    final bottomSlide = MediaQuery.of(context).size.height * 0.15;
-
-    return AnimatedBuilder(
-      animation: _animationController,
-      builder: (context, child) {
-        double rightSlide = leftSlide * _animationController.value;
-        double topSlide = bottomSlide * _animationController.value;
-        return Stack(
-          children: [
-            Scaffold(
-              backgroundColor: Colors.black,
-              body: const DrawerData(),
+    return DrawerWraper(
+      animationController: _animationController,
+      page: Scaffold(
+        backgroundColor: Color(0xFFEFEFEF),
+        appBar: AppBar(
+          elevation: 0,
+          leadingWidth: Adapt.px(120),
+          backgroundColor: Color(0xFFEFEFEF),
+          title: Text(
+            'Learn Media',
+            style: TextStyles.appBarTextStyle,
+          ),
+          leading: IconButton(
+            splashRadius: Adapt.px(10),
+            onPressed: () {
+              SystemChrome.setSystemUIOverlayStyle(
+                SystemUiOverlayStyle(
+                  statusBarColor: Colors.transparent,
+                  statusBarIconBrightness: _animationController.value == 0
+                      ? Brightness.light
+                      : Brightness.dark,
+                ),
+              );
+              _toggleAnimation();
+            },
+            icon: AnimatedIcon(
+              icon: AnimatedIcons.menu_close,
+              progress: _animationController,
+              color: AppTheme.appTheme(context).txt,
             ),
-            Transform(
-              transform: Matrix4.identity()..translate(rightSlide, topSlide),
-              alignment: Alignment.center,
-              child: Scaffold(
-                backgroundColor: Color(0xFFEFEFEF),
-                appBar: AppBar(
-                  elevation: 0,
-                  leadingWidth: Adapt.px(80),
-                  backgroundColor: Color(0xFFEFEFEF),
-                  title: Text(
-                    'Learn Media',
-                    style: TextStyles.appBarTextStyle,
+          ),
+          bottom: PreferredSize(
+            preferredSize: Size.fromHeight(Adapt.screenH() * 0.12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                    bottom: Adapt.px(10),
+                    left: Adapt.px(40),
+                    right: Adapt.px(40),
                   ),
-                  leading: IconButton(
-                    splashRadius: Adapt.px(10),
-                    onPressed: () {
-                      SystemChrome.setSystemUIOverlayStyle(
-                        SystemUiOverlayStyle(
-                          statusBarColor: Colors.transparent,
-                          statusBarIconBrightness:
-                              _animationController.value == 0
-                                  ? Brightness.light
-                                  : Brightness.dark,
-                        ),
-                      );
-                      _toggleAnimation();
-                    },
-                    icon: AnimatedIcon(
-                      icon: AnimatedIcons.menu_close,
-                      progress: _animationController,
-                      color: AppTheme.appTheme(context).txt,
-                    ),
-                  ),
-                  bottom: PreferredSize(
-                    preferredSize: Size.fromHeight(Adapt.screenH() * 0.15),
+                  child: Align(
+                    alignment: Alignment.topCenter,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        CupertinoSlidingSegmentedControl(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 5, vertical: 6),
+                          children: segmentTitle,
+                          onValueChanged: onValueChanged,
+                          groupValue: currentSegment,
+                          backgroundColor: CupertinoDynamicColor.withBrightness(
+                            color: Color(0xFFFFFFFF),
+                            darkColor: Color(0xFF636366),
+                          ),
+                          thumbColor: Color(0xFFEFEFEF),
+                        ),
                         Padding(
-                          padding: EdgeInsets.only(
-                            bottom: Adapt.px(10),
-                            left: Adapt.px(20),
-                            right: Adapt.px(20),
+                          padding: const EdgeInsets.only(
+                            top: 10,
                           ),
-                          child: Align(
-                            alignment: Alignment.topCenter,
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                left: 20,
-                                right: 20,
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  CupertinoSlidingSegmentedControl(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 40, vertical: 6),
-                                    children: segmentTitle,
-                                    onValueChanged: onValueChanged,
-                                    groupValue: currentSegment,
-                                    backgroundColor:
-                                        CupertinoDynamicColor.withBrightness(
-                                      color: Color(0xFFFFFFFF),
-                                      darkColor: Color(0xFF636366),
-                                    ),
-                                    thumbColor: Color(0xFFEFEFEF),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 10),
-                                    child: Text(
-                                        'All ${currentSegment == 0 ? 'Documents' : 'Videos'}',
-                                        style: TextStyles.appBarTextStyle
-                                            .copyWith(
-                                                fontWeight: FontWeight.w400,
-                                                fontSize: Adapt.px(30))),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                          child: Text(
+                              'All ${currentSegment == 0 ? 'Documents' : 'Videos'}',
+                              style: TextStyles.heading),
                         ),
                       ],
                     ),
                   ),
                 ),
-                body: LearningContent(
-                  children: children,
-                  currentSegment: currentSegment,
-                ),
-              ),
-            )
-          ],
-        );
-      },
+              ],
+            ),
+          ),
+        ),
+        body: LearningContent(
+          children: children,
+          currentSegment: currentSegment,
+        ),
+      ),
     );
   }
 }
