@@ -80,8 +80,8 @@ class _AskQuestionsPageState extends State<AskQuestionsPage>
                 Padding(
                   padding: EdgeInsets.only(
                     bottom: Adapt.px(10),
-                    left: Adapt.px(40),
-                    right: Adapt.px(40),
+                    left: Adapt.px(20),
+                    right: Adapt.px(20),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -127,19 +127,20 @@ class _AskQuestionsPageState extends State<AskQuestionsPage>
                               right: Adapt.px(10),
                             ),
                             child: Container(
-                              width: Adapt.screenW() * 0.13,
+                              width: Adapt.px(100),
                               child: MaterialButton(
                                 onPressed: () {
                                   FocusScope.of(context).unfocus();
                                 },
                                 color: Colors.black,
-                                minWidth: double.infinity,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(11),
                                 ),
-                                child: Icon(
-                                  Icons.arrow_forward,
-                                  color: Colors.white,
+                                child: Center(
+                                  child: Icon(
+                                    Icons.arrow_forward,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
                             ),
