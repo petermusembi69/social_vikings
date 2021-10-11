@@ -16,6 +16,8 @@ import 'package:soc/ui/auth/sign_up/cubit/sign_up_cubit.dart';
 import 'package:soc/ui/auth/sign_up/sign_up.dart';
 import 'package:soc/ui/decision.dart';
 import 'package:soc/ui/inbox/inbox.dart';
+import 'package:soc/ui/learn/learn.dart';
+import 'package:soc/ui/privacy_policy/privacy_policy.dart';
 import 'package:soc/ui/profile/profile.dart';
 import 'package:soc/ui/widgets/cubit/log_out_cubit.dart';
 

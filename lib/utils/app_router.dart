@@ -25,6 +25,11 @@ class AppRouter {
           const SignInPage(),
           logInRoute,
         ) as Route<dynamic>;
+      case learnRoute:
+        return _route(
+          const LearnPage(),
+          learnRoute,
+        ) as Route<dynamic>;
       case signUpRoute:
         return _route(
           const SignUpPage(),
@@ -44,6 +49,11 @@ class AppRouter {
         return _route(
           const AskQuestionsPage(),
           askQuestionsRoute,
+        ) as Route<dynamic>;
+      case privacyPolicyRoute:
+        return _route(
+          const PrivacyPolicy(),
+          privacyPolicyRoute,
         ) as Route<dynamic>;
 
       default:

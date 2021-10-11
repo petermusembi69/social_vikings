@@ -14,16 +14,19 @@ void setUpServiceLocator() {
     ..registerLazySingleton<SignInCubit>(
       () => SignInCubit(
         authService: locator(),
+        hiveService: locator(),
       ),
     )
     ..registerLazySingleton<SignUpCubit>(
       () => SignUpCubit(
         authService: locator(),
+        hiveService: locator(),
       ),
     )
     ..registerLazySingleton<LogOutCubit>(
       () => LogOutCubit(
         authService: locator(),
+        hiveService: locator(),
       ),
     );
 }

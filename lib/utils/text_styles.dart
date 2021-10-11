@@ -22,7 +22,31 @@ class TextStyles {
   static final tabStyle = TextStyle(
     color: _appTheme.accent2Txt,
     fontSize: Adapt.px(32),
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.bold,
+  );
+
+  static final heading = TextStyle(
+    color: _appTheme.accent2Txt,
+    fontSize: Adapt.px(32),
+    fontWeight: FontWeight.bold,
+  );
+
+  static final subHeading = TextStyle(
+    color: _appTheme.accent2Txt,
+    fontSize: Adapt.px(28),
+    fontWeight: FontWeight.bold,
+  );
+
+  static final medium = TextStyle(
+    color: _appTheme.quickSilver,
+    fontSize: Adapt.px(24),
+    fontWeight: FontWeight.w500
+  );
+
+  static final standard = TextStyle(
+    color: _appTheme.accent2Txt,
+    fontSize: Adapt.px(24),
+    fontWeight: FontWeight.bold
   );
 
   static final cardStyle = TextStyle(
