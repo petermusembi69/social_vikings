@@ -55,7 +55,7 @@ class AuthServiceImpl implements AuthService {
 
   @override
   Future<void> signOut() async {
-    return Future.value([_firebaseAuth.signOut(), _googleSignIn.signOut()]);
+    return Future.value([_firebaseAuth.signOut(), _googleSignIn.signOut(),_facebookAuth.logOut()]);
   }
 
   @override
