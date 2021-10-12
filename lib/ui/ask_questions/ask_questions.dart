@@ -156,7 +156,7 @@ class _AskQuestionsPageState extends State<AskQuestionsPage>
                         ),
                         child: Row(
                           children: [
-                            Text('All Questions',style: TextStyles.heading),
+                            Text('All Questions', style: TextStyles.heading),
                             Spacer(),
                             Icon(
                               Icons.filter_alt_rounded,
