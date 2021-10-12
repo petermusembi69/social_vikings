@@ -22,7 +22,6 @@ class AppTheme {
   Color? quickSilver;
   Color? greyWeak;
 
-
   Color? txt;
   Color? accentTxt;
   Color? accent1Txt;

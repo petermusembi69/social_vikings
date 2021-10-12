@@ -260,121 +260,17 @@ class _SignUpViewState extends State<SignUpView> {
                         },
                         child: RichText(
                           text: TextSpan(
-                            style: TextStyle(
-                              color: AppTheme.appTheme(context)
-                                  .accent1!
-                                  .withOpacity(0.8),
-                            ),
+                            style: TextStyles.standard,
                             children: [
                               const TextSpan(
                                 text: 'Already have an account? ',
                               ),
                               TextSpan(
                                 text: 'Sign In',
-                                style: TextStyle(
-                                  color:
-                                      AppTheme.appTheme(context).accent1Lighter,
-                                ),
+                                style: TextStyles.standard
+                                    .copyWith(fontWeight: FontWeight.bold),
                               ),
                             ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: Adapt.px(40),
-                        bottom: Adapt.px(30),
-                        left: Adapt.px(30),
-                        right: Adapt.px(30),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'or',
-                          style: TextStyle(
-                            color: AppTheme.appTheme(context).quickSilver,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        left: Adapt.px(30),
-                        right: Adapt.px(30),
-                      ),
-                      child: MaterialButton(
-                        onPressed: () {
-                          FocusScope.of(context).unfocus();
-                          locator<SignUpCubit>().signUpWithGoogle();
-                        },
-                        color: AppTheme.appTheme(context).bg1,
-                        minWidth: double.infinity,
-                        height: Adapt.px(90),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(11),
-                        ),
-                        child: BlocBuilder<SignUpCubit, SignUpState>(
-                          builder: (context, state) => state.when(
-                            initial: () => Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    'images/google.png',
-                                    height: Adapt.px(32),
-                                  ),
-                                  SizedBox(
-                                    width: Adapt.px(20),
-                                  ),
-                                  Text(
-                                    'Google Sign In',
-                                    style: TextStyles.subHeading,
-                                  ),
-                                ]),
-                            loading: () =>  Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    'images/google.png',
-                                    height: Adapt.px(32),
-                                  ),
-                                  SizedBox(
-                                    width: Adapt.px(20),
-                                  ),
-                                  Text(
-                                    'Google Sign In',
-                                    style: TextStyles.subHeading,
-                                  ),
-                                ]),
-                            loaded: () => Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    'images/google.png',
-                                    height: Adapt.px(32),
-                                  ),
-                                  SizedBox(
-                                    width: Adapt.px(20),
-                                  ),
-                                  Text(
-                                    'Google Sign In',
-                                    style: TextStyles.subHeading,
-                                  ),
-                                ]),
-                            error: (err) => Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    'images/google.png',
-                                    height: Adapt.px(32),
-                                  ),
-                                  SizedBox(
-                                    width: Adapt.px(20),
-                                  ),
-                                  Text(
-                                    'Google Sign In',
-                                    style: TextStyles.subHeading,
-                                  ),
-                                ]),
                           ),
                         ),
                       ),

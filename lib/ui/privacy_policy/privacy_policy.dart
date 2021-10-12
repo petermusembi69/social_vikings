@@ -86,7 +86,8 @@ class _PrivacyPolicyState extends State<PrivacyPolicy>
                       '''Veniam laboris est ad sunt dolore occaecat adipisicing excepteur sint voluptate magna id adipisicing. Dolore ea occaecat magna ullamco ullamco cillum culpa sit duis qui sunt sint aliqua proident. Consequat quis deserunt ex eiusmod ullamco ut aute consectetur eiusmod incididunt.
 Culpa et incididunt reprehenderit proident consequat.''',
                       textAlign: TextAlign.justify,
-                      style: TextStyles.subHeading.copyWith(fontWeight: FontWeight.normal),
+                      style: TextStyles.subHeading
+                          .copyWith(fontWeight: FontWeight.normal),
                     ),
                   ),
               ],

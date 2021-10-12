@@ -38,16 +38,14 @@ class TextStyles {
   );
 
   static final medium = TextStyle(
-    color: _appTheme.quickSilver,
-    fontSize: Adapt.px(24),
-    fontWeight: FontWeight.w500
-  );
+      color: _appTheme.quickSilver,
+      fontSize: Adapt.px(24),
+      fontWeight: FontWeight.w500);
 
   static final standard = TextStyle(
-    color: _appTheme.accent2Txt,
-    fontSize: Adapt.px(24),
-    fontWeight: FontWeight.bold
-  );
+      color: _appTheme.accent2Txt,
+      fontSize: Adapt.px(24),
+      fontWeight: FontWeight.bold);
 
   static final cardStyle = TextStyle(
     color: _appTheme.accent1,

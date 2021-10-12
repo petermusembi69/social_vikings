@@ -25,7 +25,7 @@ Future<void> main() async {
 
   setUpServiceLocator();
   await locator<HiveService>().initBoxes();
-  
+
   runZonedGuarded(
     () => runApp(const App()),
     (error, stackTrace) => log(error.toString(), stackTrace: stackTrace),
