@@ -2,6 +2,7 @@ part of social_services;
 
 abstract class AuthService {
   Future<dynamic> signInWithGoogle();
+  Future<dynamic> signInWithFacebook();
   Future<void> signOut();
   Future<dynamic> createUserWithEmailAndPassword(SignInDTO signInDTO);
   Future<dynamic> signInWithEmailAndPassword(SignInDTO signInDTO);
@@ -9,6 +10,7 @@ abstract class AuthService {
 
 class AuthServiceImpl implements AuthService {
   final _firebaseAuth = FirebaseAuth.instance;
+  final FacebookAuth _facebookAuth = FacebookAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   @override
@@ -23,13 +25,29 @@ class AuthServiceImpl implements AuthService {
     );
 
     final authResult = await _firebaseAuth.signInWithCredential(credential);
-    final _user = authResult.user;
-    if (_user != null) {
-      Logger().e(_user);
-      assert(!_user.isAnonymous);
+
+    if (authResult.user != null) {
+      assert(!authResult.user!.isAnonymous);
       return Future.value(
-        _user,
+        authResult,
       );
+    } else {
+      return 'An error occured';
+    }
+  }
+
+  @override
+  Future<dynamic> signInWithFacebook() async {
+    final result = await _facebookAuth.login();
+
+    final credential =
+        FacebookAuthProvider.credential(result.accessToken!.token);
+
+    final authResult = await _firebaseAuth.signInWithCredential(credential);
+
+    if (authResult.user != null) {
+      assert(!authResult.user!.isAnonymous);
+      return Future.value(authResult);
     } else {
       return 'An error occured';
     }
@@ -49,11 +67,10 @@ class AuthServiceImpl implements AuthService {
         password: signInDTO.password,
       );
       if (userCredential.user != null) {
-        return userCredential.user;
+        assert(!userCredential.user!.isAnonymous);
+        return userCredential;
       }
     } on FirebaseAuthException catch (e) {
-      Logger().e(e.toString());
-
       if (e.code == 'user-not-found') {
         return 'No user found for that email.';
       } else if (e.code == 'wrong-password') {
@@ -72,7 +89,10 @@ class AuthServiceImpl implements AuthService {
         email: signInDTO.email,
         password: signInDTO.password,
       );
-      return userCredential.user;
+      if (userCredential.user != null) {
+        assert(!userCredential.user!.isAnonymous);
+        return userCredential;
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         return 'The password provided is too weak.';
