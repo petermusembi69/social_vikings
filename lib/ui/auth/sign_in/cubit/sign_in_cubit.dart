@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:logger/logger.dart';
 import 'package:soc/models/_index.dart';
 import 'package:soc/services/_index.dart';
 
@@ -32,31 +31,14 @@ class SignInCubit extends Cubit<SignInState> {
           password: password,
         ),
       );
-      if (_result is User) {
-        _hiveService.persistToken(_result.uid);
+      if (_result is UserCredential) {
+        _hiveService.persistToken(_result.credential!.token!.toString());
         emit(const SignInState.loaded());
       } else if (_result is String) {
         emit(SignInState.error(_result));
       }
     } catch (e) {
       emit(const SignInState.error('Login Failed!'));
-    }
-  }
-
-  Future<void> signInwithGoogle() async {
-    try {
-      final dynamic _result = await _authService.signInWithGoogle();
-      Logger().d(_result);
-      if (_result is User) {
-        _hiveService.persistToken(_result.uid);
-        emit(const SignInState.loaded());
-      } else if (_result is String) {
-        emit(SignInState.error(_result));
-      }
-    } catch (e) {
-      Logger().d(e.toString());
-
-      emit(const SignInState.error('Sign in Failed!'));
     }
   }
 
