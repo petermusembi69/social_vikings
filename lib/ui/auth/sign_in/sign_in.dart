@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/rendering.dart';
+import 'package:soc/ui/auth/sign_in/cubit/facebook_sign_in_cubit.dart';
+import 'package:soc/ui/auth/sign_in/cubit/google_sign_in_cubit.dart';
 import 'package:soc/ui/auth/sign_in/cubit/sign_in_cubit.dart';
 import 'package:soc/utils/_index.dart';
 
@@ -15,8 +17,14 @@ class SignInPage extends StatefulWidget {
 class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<SignInCubit>(
-      create: (context) => locator<SignInCubit>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<SignInCubit>(create: (context) => locator<SignInCubit>()),
+        BlocProvider<GoogleSignInCubit>(
+            create: (context) => locator<GoogleSignInCubit>()),
+        BlocProvider<FacebookSignInCubit>(
+            create: (context) => locator<FacebookSignInCubit>()),
+      ],
       child: const SignInView(),
     );
   }
@@ -48,6 +56,8 @@ class _SignInViewState extends State<SignInView> {
     _passwordController.addListener(() {
       setState(() {});
     });
+    locator<FacebookSignInCubit>().reset();
+    locator<GoogleSignInCubit>().reset();
     locator<SignInCubit>().reset();
     super.initState();
   }
@@ -60,8 +70,10 @@ class _SignInViewState extends State<SignInView> {
     _passwordController.removeListener(() {
       setState(() {});
     });
-    locator.resetLazySingleton<SignInCubit>();
-
+    locator
+      ..resetLazySingleton<GoogleSignInCubit>()
+      ..resetLazySingleton<FacebookSignInCubit>()
+      ..resetLazySingleton<SignInCubit>();
     super.dispose();
   }
 
@@ -88,7 +100,7 @@ class _SignInViewState extends State<SignInView> {
         return Scaffold(
           appBar: PreferredSize(
             preferredSize: Size.fromHeight(
-              Adapt.screenH() * 0.25,
+              Adapt.screenH() * 0.2,
             ),
             child: Column(
               children: [
@@ -224,7 +236,7 @@ class _SignInViewState extends State<SignInView> {
                             _formKey.currentState!.validate();
                           }
                         },
-                        color: AppTheme.appTheme(context).accent1,
+                        color: Colors.orange,
                         minWidth: double.infinity,
                         height: Adapt.px(90),
                         shape: RoundedRectangleBorder(
@@ -269,21 +281,15 @@ class _SignInViewState extends State<SignInView> {
                         },
                         child: RichText(
                           text: TextSpan(
-                            style: TextStyle(
-                              color: AppTheme.appTheme(context)
-                                  .accent1!
-                                  .withOpacity(0.8),
-                            ),
+                            style: TextStyles.standard,
                             children: [
                               const TextSpan(
                                 text: 'Dont have an account? ',
                               ),
                               TextSpan(
                                 text: 'Sign Up',
-                                style: TextStyle(
-                                  color:
-                                      AppTheme.appTheme(context).accent1Lighter,
-                                ),
+                                style: TextStyles.standard
+                                    .copyWith(fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
@@ -310,11 +316,12 @@ class _SignInViewState extends State<SignInView> {
                       padding: EdgeInsets.only(
                         left: Adapt.px(30),
                         right: Adapt.px(30),
+                        bottom: Adapt.px(30),
                       ),
                       child: MaterialButton(
                         onPressed: () {
                           FocusScope.of(context).unfocus();
-                          locator<SignInCubit>().signInwithGoogle();
+                          locator<GoogleSignInCubit>().signInwithGoogle();
                         },
                         color: AppTheme.appTheme(context).bg1,
                         minWidth: double.infinity,
@@ -381,6 +388,89 @@ class _SignInViewState extends State<SignInView> {
                                   ),
                                   Text(
                                     'Google Sign In',
+                                    style: TextStyles.subHeading,
+                                  ),
+                                ]),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: Adapt.px(30),
+                        right: Adapt.px(30),
+                        bottom: Adapt.px(30),
+                      ),
+                      child: MaterialButton(
+                        onPressed: () {
+                          FocusScope.of(context).unfocus();
+                          locator<FacebookSignInCubit>().signInWithFacebook();
+                        },
+                        color: AppTheme.appTheme(context).bg1,
+                        minWidth: double.infinity,
+                        height: Adapt.px(90),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(11),
+                        ),
+                        child: BlocBuilder<SignInCubit, SignInState>(
+                          builder: (context, state) => state.when(
+                            initial: () => Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'images/facebook.png',
+                                    height: Adapt.px(32),
+                                  ),
+                                  SizedBox(
+                                    width: Adapt.px(20),
+                                  ),
+                                  Text(
+                                    'Facebook Sign In',
+                                    style: TextStyles.subHeading,
+                                  ),
+                                ]),
+                            loading: () => Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'images/facebook.png',
+                                    height: Adapt.px(32),
+                                  ),
+                                  SizedBox(
+                                    width: Adapt.px(20),
+                                  ),
+                                  Text(
+                                    'Facebook Sign In',
+                                    style: TextStyles.subHeading,
+                                  ),
+                                ]),
+                            loaded: () => Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'images/facebook.png',
+                                    height: Adapt.px(32),
+                                  ),
+                                  SizedBox(
+                                    width: Adapt.px(20),
+                                  ),
+                                  Text(
+                                    'Facebook Sign In',
+                                    style: TextStyles.subHeading,
+                                  ),
+                                ]),
+                            error: (err) => Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'images/facebook.png',
+                                    height: Adapt.px(32),
+                                  ),
+                                  SizedBox(
+                                    width: Adapt.px(20),
+                                  ),
+                                  Text(
+                                    'Facebook Sign In',
                                     style: TextStyles.subHeading,
                                   ),
                                 ]),
