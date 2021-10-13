@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:octo_image/octo_image.dart';
+import 'package:soc/services/_index.dart';
 import 'package:soc/ui/widgets/drawer_wrapper.dart';
 import 'package:soc/ui/widgets/question_card.dart';
 import 'package:soc/utils/_index.dart';
@@ -98,14 +100,66 @@ class _AskQuestionsPageState extends State<AskQuestionsPage>
                               child: ClipRRect(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(20)),
-                                child: Image.asset(
-                                  'images/person.jpg',
-                                ),
+                                child: locator<HiveService>()
+                                            .retrieveMember() !=
+                                        null
+                                    ? locator<HiveService>()
+                                                .retrieveMember()!
+                                                .image !=
+                                            null
+                                        ? OctoImage(
+                                            width: double.infinity,
+                                            height: double.infinity,
+                                            fit: BoxFit.cover,
+                                            image: NetworkImage(
+                                                locator<HiveService>()
+                                                    .retrieveMember()!
+                                                    .image!),
+                                            progressIndicatorBuilder:
+                                                (context, progress) {
+                                              double? value;
+                                              var expectedBytes =
+                                                  progress?.expectedTotalBytes;
+                                              if (progress != null &&
+                                                  expectedBytes != null) {
+                                                value = progress
+                                                        .cumulativeBytesLoaded /
+                                                    expectedBytes;
+                                              }
+                                              return Align(
+                                                alignment: Alignment.center,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  value: value,
+                                                  strokeWidth: 2,
+                                                  backgroundColor:
+                                                      AppTheme.appTheme(context)
+                                                          .greyWeak,
+                                                ),
+                                              );
+                                            },
+                                            errorBuilder:
+                                                (context, error, stacktrace) =>
+                                                    const Icon(Icons.error),
+                                          )
+                                        : Image.asset(
+                                            'images/person.jpg',
+                                          )
+                                    : Image.asset(
+                                        'images/person.jpg',
+                                      ),
                               ),
                               backgroundColor: Colors.black12,
                             ),
                             Text(
-                              '\t\tPosting as David',
+                              locator<HiveService>().retrieveMember() != null
+                                  ? locator<HiveService>()
+                                              .retrieveMember()!
+                                              .name !=
+                                          null
+                                      ? '\t\tPosting as ${locator<HiveService>().retrieveMember()!.name!}'
+                                      : '\t\tPosting as ${locator<HiveService>().retrieveMember()!.email}'
+                                  : '\t\tPosting as ...',
                               style: TextStyles.standard
                                   .copyWith(fontSize: Adapt.px(24)),
                             ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:soc/services/_index.dart';
 import 'package:soc/ui/widgets/cubit/log_out_cubit.dart';
 import 'package:soc/utils/_index.dart';
+import 'package:octo_image/octo_image.dart';
 
 class DrawerData extends StatefulWidget {
   const DrawerData();
@@ -59,18 +60,61 @@ class _DrawerDataState extends State<DrawerData> {
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(40)),
-                      child: Image.asset(
-                        'images/person.jpg',
-                      ),
-                    ),
+                        borderRadius: BorderRadius.all(Radius.circular(40)),
+                        child: locator<HiveService>().retrieveMember() != null
+                            ? locator<HiveService>().retrieveMember()!.image !=
+                                    null
+                                ? OctoImage(
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage(locator<HiveService>()
+                                        .retrieveMember()!
+                                        .image!),
+                                    progressIndicatorBuilder:
+                                        (context, progress) {
+                                      double? value;
+                                      var expectedBytes =
+                                          progress?.expectedTotalBytes;
+                                      if (progress != null &&
+                                          expectedBytes != null) {
+                                        value = progress.cumulativeBytesLoaded /
+                                            expectedBytes;
+                                      }
+                                      return Align(
+                                        alignment: Alignment.center,
+                                        child: CircularProgressIndicator(
+                                          value: value,
+                                          strokeWidth: 2,
+                                          backgroundColor:
+                                              AppTheme.appTheme(context)
+                                                  .greyWeak,
+                                        ),
+                                      );
+                                    },
+                                    errorBuilder:
+                                        (context, error, stacktrace) =>
+                                            const Icon(Icons.error),
+                                  )
+                                : Image.asset(
+                                    'images/person.jpg',
+                                  )
+                            : Image.asset(
+                                'images/person.jpg',
+                              )),
                   ),
                   backgroundColor: Colors.white,
                   radius: Adapt.px(80),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 10),
-                  child: Text('David O\'Regeon',
+                  child: Text(
+                      locator<HiveService>().retrieveMember() != null
+                          ? locator<HiveService>().retrieveMember()!.name !=
+                                  null
+                              ? locator<HiveService>().retrieveMember()!.name!
+                              : locator<HiveService>().retrieveMember()!.email
+                          : 'User Name',
                       style: Theme.of(context).textTheme.headline6!.copyWith(
                             color: Colors.white,
                           )),
