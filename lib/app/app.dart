@@ -17,9 +17,9 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      color: AppTheme.appTheme(context).accent1,
+      color:Colors.orange,
       theme: ThemeData(
-        accentColor: AppTheme.appTheme(context).accent1,
+        accentColor: Colors.orange,
         textTheme: GoogleFonts.latoTextTheme(
           Theme.of(context).textTheme,
         ),
