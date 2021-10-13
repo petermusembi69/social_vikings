@@ -1,24 +1,23 @@
 part of social_services;
 
 abstract class AuthService {
-  Future<dynamic> signInWithGoogle();
-  Future<dynamic> signInWithFacebook();
-  Future<void> signOut();
   Future<dynamic> createUserWithEmailAndPassword(SignInDTO signInDTO);
   Future<dynamic> signInWithEmailAndPassword(SignInDTO signInDTO);
+  Future<dynamic> signInWithFacebook();
+  Future<dynamic> signInWithGoogle();
+  Future<void> signOut();
 }
 
 class AuthServiceImpl implements AuthService {
-  final _firebaseAuth = FirebaseAuth.instance;
   final FacebookAuth _facebookAuth = FacebookAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final _firebaseAuth = FirebaseAuth.instance;
 
   @override
   Future<dynamic> signInWithGoogle() async {
     final googleSignInAccount = await _googleSignIn.signIn();
     final googleSignInAuthentication =
         await googleSignInAccount?.authentication;
-
     final AuthCredential credential = GoogleAuthProvider.credential(
       idToken: googleSignInAuthentication?.idToken,
       accessToken: googleSignInAuthentication?.accessToken,
@@ -29,7 +28,11 @@ class AuthServiceImpl implements AuthService {
     if (authResult.user != null) {
       assert(!authResult.user!.isAnonymous);
       return Future.value(
-        authResult,
+        MemberAuthDTO(
+          email: authResult.user!.email!,
+          name: authResult.user!.displayName,
+          image: null,
+        ),
       );
     } else {
       return 'An error occured';
@@ -39,15 +42,20 @@ class AuthServiceImpl implements AuthService {
   @override
   Future<dynamic> signInWithFacebook() async {
     final result = await _facebookAuth.login();
-
-    final credential =
-        FacebookAuthProvider.credential(result.accessToken!.token);
-
-    final authResult = await _firebaseAuth.signInWithCredential(credential);
-
+    AuthCredential? credential;
+    if (result.status == LoginStatus.success) {
+      AccessToken myToken = result.accessToken!;
+      credential = FacebookAuthProvider.credential(myToken.token);
+    }
+    final authResult = await _firebaseAuth.signInWithCredential(credential!);
     if (authResult.user != null) {
       assert(!authResult.user!.isAnonymous);
-      return Future.value(authResult);
+      return Future.value(
+        MemberAuthDTO(
+            email: authResult.user!.email!,
+            name: authResult.user!.displayName,
+            image: authResult.user!.photoURL),
+      );
     } else {
       return 'An error occured';
     }
@@ -55,7 +63,11 @@ class AuthServiceImpl implements AuthService {
 
   @override
   Future<void> signOut() async {
-    return Future.value([_firebaseAuth.signOut(), _googleSignIn.signOut(),_facebookAuth.logOut()]);
+    return Future.value([
+      _firebaseAuth.signOut(),
+      _googleSignIn.signOut(),
+      _facebookAuth.logOut()
+    ]);
   }
 
   @override
@@ -68,7 +80,11 @@ class AuthServiceImpl implements AuthService {
       );
       if (userCredential.user != null) {
         assert(!userCredential.user!.isAnonymous);
-        return userCredential;
+        return MemberAuthDTO(
+          email: userCredential.user!.email!,
+          name: userCredential.user!.displayName,
+          image: null,
+        );
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -91,7 +107,11 @@ class AuthServiceImpl implements AuthService {
       );
       if (userCredential.user != null) {
         assert(!userCredential.user!.isAnonymous);
-        return userCredential;
+        return MemberAuthDTO(
+          email: userCredential.user!.email!,
+          name: userCredential.user!.displayName,
+          image: null,
+        );
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {

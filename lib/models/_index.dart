@@ -1,6 +1,9 @@
 library social_models;
 
+import 'dart:convert';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hive/hive.dart';
 
 part 'auth.dart';
 
