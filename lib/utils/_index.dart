@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:soc/services/_index.dart';
 import 'package:soc/ui/ask_questions/ask_questions.dart';
+import 'package:soc/ui/auth/sign_in/cubit/facebook_sign_in_cubit.dart';
+import 'package:soc/ui/auth/sign_in/cubit/google_sign_in_cubit.dart';
 import 'package:soc/ui/auth/sign_in/cubit/sign_in_cubit.dart';
 import 'package:soc/ui/auth/sign_in/sign_in.dart';
 import 'package:soc/ui/auth/sign_up/cubit/sign_up_cubit.dart';

@@ -28,5 +28,17 @@ void setUpServiceLocator() {
         authService: locator(),
         hiveService: locator(),
       ),
+    )
+    ..registerLazySingleton<FacebookSignInCubit>(
+      () => FacebookSignInCubit(
+        authService: locator(),
+        hiveService: locator(),
+      ),
+    )
+    ..registerLazySingleton<GoogleSignInCubit>(
+      () => GoogleSignInCubit(
+        authService: locator(),
+        hiveService: locator(),
+      ),
     );
 }
