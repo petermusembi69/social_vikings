@@ -30,8 +30,8 @@ class _DecisionPageState extends State<DecisionPage> {
       valueListenable:
           Hive.box(SocialAppConfig.instance!.values.authBox).listenable(),
       builder: (context, Box box, _) {
-        final _accToken = box.get('accessToken');
-        if (_accToken == null) {
+        final member = box.get('member');
+        if (member == null) {
           _redirectToPage(
             context,
             routeName: AppRouter.logInRoute,
