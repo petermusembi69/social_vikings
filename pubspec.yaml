@@ -33,7 +33,7 @@ dependencies:
   flutter_screenutil: ^5.0.0-nullsafety.11
   flutter_slidable: ^0.6.0
   flutter_svg: ^0.21.0-nullsafety.0
-  flutter_facebook_auth: ^3.5.0
+  flutter_facebook_auth: ^3.5.2
   freezed_annotation: ^0.14.1
   get_it: ^7.1.2
   google_fonts: ^2.1.0
@@ -43,6 +43,7 @@ dependencies:
   hive_flutter: ^1.0.0
   http: ^0.13.1
   intl: ^0.17.0
+  octo_image: ^1.0.0+1
 
 dev_dependencies:
   flutter_test:
