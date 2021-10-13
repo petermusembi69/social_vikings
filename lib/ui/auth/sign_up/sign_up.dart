@@ -136,7 +136,10 @@ class _SignUpViewState extends State<SignUpView> {
                           keyboardType: TextInputType.emailAddress,
                           controller: _emailController,
                           decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.email),
+                            prefixIcon: Icon(
+                              Icons.email,
+                              color: AppTheme.appTheme(context).quickSilver,
+                            ),
                             border: const OutlineInputBorder(
                               borderSide: BorderSide.none,
                               borderRadius: BorderRadius.all(
@@ -179,7 +182,10 @@ class _SignUpViewState extends State<SignUpView> {
                           obscureText: true,
                           controller: _passwordController,
                           decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.lock),
+                            prefixIcon: Icon(
+                              Icons.lock,
+                              color: AppTheme.appTheme(context).quickSilver,
+                            ),
                             border: const OutlineInputBorder(
                               borderSide: BorderSide.none,
                               borderRadius: BorderRadius.all(
@@ -214,7 +220,7 @@ class _SignUpViewState extends State<SignUpView> {
                             _formKey.currentState!.validate();
                           }
                         },
-                        color: AppTheme.appTheme(context).accent1,
+                        color: Colors.orange,
                         minWidth: double.infinity,
                         height: Adapt.px(90),
                         shape: RoundedRectangleBorder(
@@ -267,8 +273,10 @@ class _SignUpViewState extends State<SignUpView> {
                               ),
                               TextSpan(
                                 text: 'Sign In',
-                                style: TextStyles.standard
-                                    .copyWith(fontWeight: FontWeight.bold),
+                                style: TextStyles.standard.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.orange,
+                                ),
                               ),
                             ],
                           ),

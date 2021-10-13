@@ -31,8 +31,9 @@ class SignInCubit extends Cubit<SignInState> {
           password: password,
         ),
       );
-      if (_result is UserCredential) {
-        _hiveService.persistToken(_result.credential!.token!.toString());
+      if (_result is MemberAuthDTO) {
+        _hiveService.persistMemeber(_result);
+
         emit(const SignInState.loaded());
       } else if (_result is String) {
         emit(SignInState.error(_result));

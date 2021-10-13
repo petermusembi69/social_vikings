@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:soc/models/_index.dart';
 import 'package:soc/services/_index.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 part 'sign_up_state.dart';
 part 'sign_up_cubit.freezed.dart';
@@ -31,9 +30,8 @@ class SignUpCubit extends Cubit<SignUpState> {
           password: password,
         ),
       );
-
-      if (_result is UserCredential) {
-        _hiveService.persistToken(_result.credential!.token!.toString());
+      if (_result is MemberAuthDTO) {
+        _hiveService.persistMemeber(_result);
         emit(const SignUpState.loaded());
       } else if (_result is String) {
         emit(SignUpState.error(_result));
