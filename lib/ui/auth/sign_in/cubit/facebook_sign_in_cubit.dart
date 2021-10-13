@@ -30,7 +30,10 @@ class FacebookSignInCubit extends Cubit<FacebookSignInState> {
         emit(FacebookSignInState.error(_result));
       }
     } catch (e) {
-      emit(FacebookSignInState.error(e.toString().split(']').last));
+      emit(FacebookSignInState.error(
+          e.toString().split(']').last.contains('ull')
+              ? 'Sign in failed'
+              : e.toString().split(']').last));
     }
   }
 

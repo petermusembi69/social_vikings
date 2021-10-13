@@ -30,7 +30,8 @@ class GoogleSignInCubit extends Cubit<GoogleSignInState> {
         emit(GoogleSignInState.error(_result));
       }
     } catch (e) {
-      emit(GoogleSignInState.error(e.toString()));
+      emit(GoogleSignInState.error(
+          e.toString().contains('ull') ? 'Sign in failed' : e.toString()));
     }
   }
 
