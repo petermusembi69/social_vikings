@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Social App</string>
+    <string name="app_name">Soc</string>
     <string name="facebook_app_id">172145478427142</string>
     <string name="fb_login_protocol_scheme">fb172145478427142</string>
 </resources>
