@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:logger/logger.dart';
 import 'package:soc/models/_index.dart';
 import 'package:soc/services/_index.dart';
 
@@ -30,8 +31,8 @@ class GoogleSignInCubit extends Cubit<GoogleSignInState> {
         emit(GoogleSignInState.error(_result));
       }
     } catch (e) {
-      emit(GoogleSignInState.error(
-          e.toString().contains('ull') ? 'Sign in failed' : e.toString()));
+      emit(GoogleSignInState.error('Sign in failed'));
+      Logger().e(e.toString());
     }
   }
 

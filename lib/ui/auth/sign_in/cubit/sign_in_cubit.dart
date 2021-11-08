@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:logger/logger.dart';
 import 'package:soc/models/_index.dart';
 import 'package:soc/services/_index.dart';
 
@@ -40,6 +41,7 @@ class SignInCubit extends Cubit<SignInState> {
       }
     } catch (e) {
       emit(const SignInState.error('Login Failed!'));
+      Logger().e(e.toString());
     }
   }
 

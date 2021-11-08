@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:soc/ui/learn/widget/learn_helpers.dart';
 import 'package:soc/ui/widgets/drawer_wrapper.dart';
 import 'package:soc/ui/widgets/learning_content.dart';
+import 'package:soc/ui/widgets/ui_helpers.dart';
 import 'package:soc/utils/_index.dart';
 
 class LearnPage extends StatefulWidget {
@@ -19,14 +21,6 @@ class _LearnPageState extends State<LearnPage> {
   }
 }
 
-List<String> title = [
-  'Tying in Knots',
-  'The Point Flow and Rhythm',
-  'The blade and brush stroke',
-  'Knitting and sorting',
-  'Tying in Knots',
-];
-
 class LearnView extends StatefulWidget {
   const LearnView({Key? key}) : super(key: key);
 
@@ -37,19 +31,13 @@ class LearnView extends StatefulWidget {
 class _LearnViewState extends State<LearnView>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
+  int currentSegment = 1;
 
   @override
   void initState() {
-    super.initState();
-
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 300));
-  }
-
-  _toggleAnimation() {
-    _animationController.isDismissed
-        ? _animationController.forward()
-        : _animationController.reverse();
+    super.initState();
   }
 
   @override
@@ -58,125 +46,12 @@ class _LearnViewState extends State<LearnView>
     super.dispose();
   }
 
-  final segmentTitle = <int, Widget>{
-    0: Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 40),
-      child: Text(
-        'Documents',
-        style: TextStyles.subHeading,
-      ),
-    ),
-    1: Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 40),
-      child: Text(
-        'Videos',
-        style: TextStyles.subHeading,
-      ),
-    ),
-  };
-
-  final children = <int, Widget>{
-    1: ListView.builder(
-        itemCount: 4,
-        itemBuilder: (BuildContext context, int index) {
-          return Card(
-            color: Colors.white,
-            shape: RoundedRectangleBorder(
-              side: BorderSide(color: Colors.white70, width: 1),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            margin: EdgeInsets.all(20.0),
-            child: Wrap(
-              children: <Widget>[
-                FractionallySizedBox(
-                    widthFactor: 0.4,
-                    child: Padding(
-                      padding: EdgeInsets.all(Adapt.px(20)),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black12.withOpacity(0.05),
-                                spreadRadius: 0.5,
-                                blurRadius: 6,
-                                offset: Offset(2, 6),
-                              ),
-                            ]),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                          child: Image.asset(
-                            'images/videoimage.png',
-                          ),
-                        ),
-                      ),
-                    )),
-                FractionallySizedBox(
-                  widthFactor: 0.6,
-                  child: Container(
-                    height: kToolbarHeight * 1.8,
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                        top: Adapt.px(20),
-                        bottom: Adapt.px(20),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            title[index],
-                            style: TextStyles.subHeading,
-                            softWrap: true,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          Spacer(),
-                          Text(
-                            'Brass bringing joy into surgical training. This concept is derived from',
-                            style: TextStyles.medium,
-                            softWrap: true,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          Spacer(),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.watch_later,
-                                color: Colors.black,
-                                size: Adapt.px(28),
-                              ),
-                              SizedBox(
-                                width: Adapt.px(4),
-                              ),
-                              Text(
-                                '19m 15s',
-                                style: TextStyles.standard,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
-        }),
-    0: Center(
-      child: Text(
-        'Videos',
-        style: TextStyles.tabStyle,
-      ),
-    )
-  };
-  int currentSegment = 1;
   void onValueChanged(int? value) {
-    setState(() {
-      currentSegment = value!;
-    });
+    setState(
+      () {
+        currentSegment = value!;
+      },
+    );
   }
 
   @override
@@ -204,7 +79,7 @@ class _LearnViewState extends State<LearnView>
                       : Brightness.dark,
                 ),
               );
-              _toggleAnimation();
+              toggleAnimation(_animationController);
             },
             icon: AnimatedIcon(
               icon: AnimatedIcons.menu_close,
@@ -231,7 +106,7 @@ class _LearnViewState extends State<LearnView>
                         CupertinoSlidingSegmentedControl(
                           padding:
                               EdgeInsets.symmetric(horizontal: 5, vertical: 6),
-                          children: segmentTitle,
+                          children: learnTabTitle,
                           onValueChanged: onValueChanged,
                           groupValue: currentSegment,
                           backgroundColor: CupertinoDynamicColor.withBrightness(
@@ -257,7 +132,7 @@ class _LearnViewState extends State<LearnView>
           ),
         ),
         body: LearningContent(
-          children: children,
+          children: learnTabchildren,
           currentSegment: currentSegment,
         ),
       ),

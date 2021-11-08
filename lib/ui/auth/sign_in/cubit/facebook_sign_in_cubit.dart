@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:logger/logger.dart';
 import 'package:soc/models/_index.dart';
 import 'package:soc/services/_index.dart';
 
@@ -30,10 +31,8 @@ class FacebookSignInCubit extends Cubit<FacebookSignInState> {
         emit(FacebookSignInState.error(_result));
       }
     } catch (e) {
-      emit(FacebookSignInState.error(
-          e.toString().split(']').last.contains('ull')
-              ? 'Sign in failed'
-              : e.toString().split(']').last));
+      emit(FacebookSignInState.error('Sign in failed'));
+      Logger().e(e.toString());
     }
   }
 

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:octo_image/octo_image.dart';
 import 'package:soc/services/_index.dart';
 import 'package:soc/ui/widgets/drawer_wrapper.dart';
 import 'package:soc/ui/widgets/question_card.dart';
+import 'package:soc/ui/widgets/ui_helpers.dart';
 import 'package:soc/utils/_index.dart';
 
 class AskQuestionsPage extends StatefulWidget {
@@ -21,16 +21,9 @@ class _AskQuestionsPageState extends State<AskQuestionsPage>
 
   @override
   void initState() {
-    super.initState();
-
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 300));
-  }
-
-  _toggleAnimation() {
-    _animationController.isDismissed
-        ? _animationController.forward()
-        : _animationController.reverse();
+    super.initState();
   }
 
   @override
@@ -67,7 +60,7 @@ class _AskQuestionsPageState extends State<AskQuestionsPage>
                       : Brightness.dark,
                 ),
               );
-              _toggleAnimation();
+              toggleAnimation(_animationController);
             },
             icon: Icon(
               Icons.arrow_back,
@@ -98,57 +91,19 @@ class _AskQuestionsPageState extends State<AskQuestionsPage>
                           children: [
                             CircleAvatar(
                               child: ClipRRect(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20)),
-                                child: locator<HiveService>()
-                                            .retrieveMember() !=
-                                        null
-                                    ? locator<HiveService>()
-                                                .retrieveMember()!
-                                                .image !=
-                                            null
-                                        ? OctoImage(
-                                            width: double.infinity,
-                                            height: double.infinity,
-                                            fit: BoxFit.cover,
-                                            image: NetworkImage(
-                                                locator<HiveService>()
-                                                    .retrieveMember()!
-                                                    .image!),
-                                            progressIndicatorBuilder:
-                                                (context, progress) {
-                                              double? value;
-                                              var expectedBytes =
-                                                  progress?.expectedTotalBytes;
-                                              if (progress != null &&
-                                                  expectedBytes != null) {
-                                                value = progress
-                                                        .cumulativeBytesLoaded /
-                                                    expectedBytes;
-                                              }
-                                              return Align(
-                                                alignment: Alignment.center,
-                                                child:
-                                                    CircularProgressIndicator(
-                                                  value: value,
-                                                  strokeWidth: 2,
-                                                  backgroundColor:
-                                                      AppTheme.appTheme(context)
-                                                          .greyWeak,
-                                                ),
-                                              );
-                                            },
-                                            errorBuilder:
-                                                (context, error, stacktrace) =>
-                                                    const Icon(Icons.error),
-                                          )
-                                        : Image.asset(
-                                            'images/person.jpg',
-                                          )
-                                    : Image.asset(
-                                        'images/person.jpg',
-                                      ),
-                              ),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20)),
+                                  child:
+                                      locator<HiveService>().retrieveMember() !=
+                                                  null &&
+                                              locator<HiveService>()
+                                                      .retrieveMember()!
+                                                      .image !=
+                                                  null
+                                          ? profileImage()
+                                          : Image.asset(
+                                              'images/person.jpg',
+                                            )),
                               backgroundColor: Colors.black12,
                             ),
                             Text(
@@ -166,40 +121,8 @@ class _AskQuestionsPageState extends State<AskQuestionsPage>
                           ],
                         ),
                       ),
-                      TextFormField(
+                      questionTextField(
                         focusNode: _questionFocusNode,
-                        decoration: InputDecoration(
-                          hintText: 'Write Question here',
-                          filled: true,
-                          fillColor: Colors.white,
-                          border: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15))),
-                          suffixIcon: Padding(
-                            padding: EdgeInsets.only(
-                              right: Adapt.px(10),
-                            ),
-                            child: Container(
-                              width: Adapt.px(100),
-                              child: MaterialButton(
-                                onPressed: () {
-                                  FocusScope.of(context).unfocus();
-                                },
-                                color: Colors.black,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(11),
-                                ),
-                                child: Center(
-                                  child: Icon(
-                                    Icons.arrow_forward,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
                         controller: questionController,
                       ),
                       Padding(

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:soc/services/_index.dart';
 import 'package:soc/ui/widgets/cubit/log_out_cubit.dart';
+import 'package:soc/ui/widgets/drawer_item.dart';
+import 'package:soc/ui/widgets/ui_helpers.dart';
 import 'package:soc/utils/_index.dart';
 import 'package:octo_image/octo_image.dart';
 
@@ -21,25 +23,31 @@ class _DrawerDataState extends State<DrawerData> {
   @override
   Widget build(BuildContext context) {
     final List<DrawerItem> drawer = [
-      DrawerItem('Learn', Icons.account_circle,
-          () => Navigator.pushReplacementNamed(context, AppRouter.learnRoute)),
+      DrawerItem(
+          'Learn',
+          Icons.account_circle,
+          () => Navigator.pushNamedAndRemoveUntil(
+              context, AppRouter.learnRoute, (Route<dynamic> route) => false)),
       DrawerItem(
           'Ask a question',
           Icons.message,
-          () => Navigator.pushReplacementNamed(
-              context, AppRouter.askQuestionsRoute)),
-      DrawerItem('Inbox', Icons.compare_arrows,
-          () => Navigator.pushNamed(context, AppRouter.inboxRoute)),
+          () => Navigator.pushNamedAndRemoveUntil(context,
+              AppRouter.askQuestionsRoute, (Route<dynamic> route) => false)),
+      DrawerItem(
+          'Inbox',
+          Icons.compare_arrows,
+          () => Navigator.pushNamedAndRemoveUntil(
+              context, AppRouter.inboxRoute, (Route<dynamic> route) => false)),
       DrawerItem(
           'Privacy Policy',
           Icons.bookmark,
-          () => Navigator.pushReplacementNamed(
-              context, AppRouter.privacyPolicyRoute)),
+          () => Navigator.pushNamedAndRemoveUntil(context,
+              AppRouter.privacyPolicyRoute, (Route<dynamic> route) => false)),
       DrawerItem('logOut', Icons.exit_to_app, () async {
         await locator<AuthService>().signOut();
         locator<HiveService>().clearPrefs();
-        Navigator.pop(context);
-        Navigator.pushNamed(context, AppRouter.intialRoute);
+        Navigator.pushNamedAndRemoveUntil(
+            context, AppRouter.intialRoute, (Route<dynamic> route) => false);
       }),
     ];
     return Padding(
@@ -121,16 +129,8 @@ class _DrawerDataState extends State<DrawerData> {
                 ),
                 Wrap(
                   children: [
-                    Text(
-                      'Sensei \u2022',
-                      style: TextStyles.createShopPlaceHolderStyle.copyWith(
-                        color: Colors.white,
-                      ),
-                    ),
-                    Text(' Admin',
-                        style: TextStyles.createShopPlaceHolderStyle.copyWith(
-                          color: Colors.white,
-                        )),
+                    profileText('Sensei \u2022'),
+                    profileText(' Admin'),
                   ],
                 ),
               ],
@@ -138,41 +138,41 @@ class _DrawerDataState extends State<DrawerData> {
           ),
           Spacer(),
           ListView.builder(
-              itemCount: drawer.length,
-              shrinkWrap: true,
-              itemBuilder: (_, index) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 12, left: 12),
-                  child: InkWell(
-                    onTap: drawer[index].action,
-                    child: Container(
-                      height: 48,
-                      width: double.infinity,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Icon(
-                              drawer[index].icon,
-                              color: Colors.white,
-                            ),
+            itemCount: drawer.length,
+            shrinkWrap: true,
+            itemBuilder: (_, index) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 12, left: 12),
+                child: InkWell(
+                  onTap: drawer[index].action,
+                  child: Container(
+                    height: 48,
+                    width: double.infinity,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Icon(
+                            drawer[index].icon,
+                            color: Colors.white,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Text(
-                              drawer[index].name,
-                              style:
-                                  TextStyle(fontSize: 16, color: Colors.white),
-                            ),
-                          )
-                        ],
-                      ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Text(
+                            drawer[index].name,
+                            style: TextStyle(fontSize: 16, color: Colors.white),
+                          ),
+                        )
+                      ],
                     ),
                   ),
-                );
-              }),
+                ),
+              );
+            },
+          ),
           Spacer(
             flex: 4,
           ),
@@ -180,12 +180,4 @@ class _DrawerDataState extends State<DrawerData> {
       ),
     );
   }
-}
-
-class DrawerItem {
-  final String name;
-  final IconData icon;
-  final Function()? action;
-
-  const DrawerItem(this.name, this.icon, this.action);
 }

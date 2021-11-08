@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:soc/ui/auth/sign_in/cubit/facebook_sign_in_cubit.dart';
 import 'package:soc/ui/auth/sign_in/cubit/google_sign_in_cubit.dart';
 import 'package:soc/ui/auth/sign_in/cubit/sign_in_cubit.dart';
+import 'package:soc/ui/auth/widgets/auth_helpers.dart';
 import 'package:soc/utils/_index.dart';
 
 class SignInPage extends StatefulWidget {
@@ -85,77 +86,31 @@ class _SignInViewState extends State<SignInView> {
       listener: (context, state) => state.when(
         initial: () {},
         loading: () {},
-        loaded: () {
-          FocusScope.of(context).unfocus();
-          Navigator.pushReplacementNamed(context, AppRouter.learnRoute);
-          locator<SignInCubit>().reset();
-        },
-        error: (error) {
-          final snackBar = SnackBar(content: Text(error));
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          locator<SignInCubit>().reset();
-        },
+        loaded: () => onLoaded(locator<SignInCubit>().reset()),
+        error: (error) =>
+            onError(error, locator<SignInCubit>().reset(), context),
       ),
       builder: (context, state) {
         return BlocConsumer<FacebookSignInCubit, FacebookSignInState>(
           listener: (context, state) => state.when(
             initial: () {},
             loading: () {},
-            loaded: () {
-              FocusScope.of(context).unfocus();
-              Navigator.pushReplacementNamed(context, AppRouter.learnRoute);
-              locator<FacebookSignInCubit>().reset();
-            },
-            error: (error) {
-              final snackBar = SnackBar(content: Text(error));
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-              locator<FacebookSignInCubit>().reset();
-            },
+            loaded: () => onLoaded(locator<FacebookSignInCubit>().reset()),
+            error: (error) =>
+                onError(error, locator<FacebookSignInCubit>().reset(), context),
           ),
           builder: (context, state) {
             return BlocConsumer<GoogleSignInCubit, GoogleSignInState>(
               listener: (context, state) => state.when(
                 initial: () {},
                 loading: () {},
-                loaded: () {
-                  FocusScope.of(context).unfocus();
-                  Navigator.pushReplacementNamed(context, AppRouter.learnRoute);
-                  locator<GoogleSignInCubit>().reset();
-                },
-                error: (error) {
-                  final snackBar = SnackBar(content: Text(error));
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  locator<GoogleSignInCubit>().reset();
-                },
+                loaded: () => onLoaded(locator<GoogleSignInCubit>().reset()),
+                error: (error) => onError(
+                    error, locator<FacebookSignInCubit>().reset(), context),
               ),
               builder: (context, state) {
                 return Scaffold(
-                  appBar: PreferredSize(
-                    preferredSize: Size.fromHeight(
-                      Adapt.screenH() * 0.25,
-                    ),
-                    child: Column(
-                      children: [
-                        Container(
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(12, 24, 12, 12),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 24, bottom: 12),
-                              child: Text(
-                                'Welcome, Sign In',
-                                style: Theme.of(context).textTheme.headline5,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Image.asset(
-                          'images/brain.png',
-                          height: Adapt.screenH() * 0.1,
-                        ),
-                      ],
-                    ),
-                  ),
+                  appBar: appBar('Welcome, Sign In'),
                   body: FractionallySizedBox(
                     child: Container(
                       decoration: BoxDecoration(
@@ -167,181 +122,51 @@ class _SignInViewState extends State<SignInView> {
                         key: _formKey,
                         child: ListView(
                           children: [
-                            Padding(
-                              padding: EdgeInsets.only(
-                                top: Adapt.px(30),
-                                left: Adapt.px(30),
-                                right: Adapt.px(30),
-                              ),
-                              child: Text(
-                                'Email Address',
-                                style: TextStyles.appBarTextStyle,
-                              ),
+                            labelTxt('Email Address'),
+                            textField(
+                              hintText: 'example@gmail.com',
+                              controller: _emailController,
+                              icon: Icons.mail,
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                left: Adapt.px(30),
-                                right: Adapt.px(30),
-                                top: Adapt.px(10),
-                              ),
-                              child: Material(
-                                shadowColor: AppTheme.appTheme(context).grey,
-                                borderRadius: BorderRadius.circular(12),
-                                child: TextFormField(
-                                  autovalidateMode:
-                                      AutovalidateMode.onUserInteraction,
-                                  keyboardType: TextInputType.emailAddress,
-                                  controller: _emailController,
-                                  decoration: InputDecoration(
-                                    prefixIcon: Icon(
-                                      Icons.mail,
-                                      color: AppTheme.appTheme(context)
-                                          .quickSilver,
-                                    ),
-                                    border: const OutlineInputBorder(
-                                      borderSide: BorderSide.none,
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(10),
-                                      ),
-                                    ),
-                                    filled: true,
-                                    fillColor: Colors.white,
-                                    hintText: 'example@gmail.com',
-                                    hintStyle: TextStyles.medium,
-                                    contentPadding: const EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 5),
-                                  ),
-                                ),
-                              ),
+                            labelTxt('Password'),
+                            textField(
+                              hintText: 'password',
+                              controller: _passwordController,
+                              icon: Icons.lock,
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                top: Adapt.px(30),
-                                left: Adapt.px(30),
-                                right: Adapt.px(30),
-                              ),
-                              child: Text(
-                                'Password',
-                                style: TextStyles.appBarTextStyle,
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                left: Adapt.px(30),
-                                right: Adapt.px(30),
-                                top: Adapt.px(10),
-                              ),
-                              child: Material(
-                                shadowColor: AppTheme.appTheme(context).grey,
-                                borderRadius: BorderRadius.circular(12),
-                                child: TextFormField(
-                                  autovalidateMode:
-                                      AutovalidateMode.onUserInteraction,
-                                  keyboardType: TextInputType.visiblePassword,
-                                  obscureText: true,
-                                  controller: _passwordController,
-                                  decoration: InputDecoration(
-                                    prefixIcon: Icon(
-                                      Icons.lock,
-                                      color: AppTheme.appTheme(context)
-                                          .quickSilver,
-                                    ),
-                                    border: const OutlineInputBorder(
-                                      borderSide: BorderSide.none,
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(10),
-                                      ),
-                                    ),
-                                    filled: true,
-                                    fillColor: Colors.white,
-                                    hintText: 'password',
-                                    hintStyle: TextStyles.medium,
-                                    contentPadding: const EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 5),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                top: Adapt.px(30),
-                                left: Adapt.px(30),
-                                right: Adapt.px(30),
-                              ),
-                              child: MaterialButton(
-                                onPressed: () {
-                                  FocusScope.of(context).unfocus();
-                                  if (_formKey.currentState!.validate()) {
-                                    locator<SignInCubit>().signIn(
-                                      email: _emailController.text,
-                                      password: _passwordController.text,
-                                    );
-                                  } else {
-                                    _formKey.currentState!.validate();
-                                  }
-                                },
-                                color: Colors.orange,
-                                minWidth: double.infinity,
-                                height: Adapt.px(90),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(11),
-                                ),
-                                child: BlocBuilder<SignInCubit, SignInState>(
-                                  builder: (context, state) => state.when(
-                                    initial: () => Text(
-                                      'Sign In',
-                                      style: TextStyles.shopBtnTextStyle,
-                                    ),
-                                    loading: () => SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        backgroundColor:
-                                            AppTheme.appTheme(context).greyWeak,
-                                      ),
-                                    ),
-                                    loaded: () => Text(
-                                      'Sign In',
-                                      style: TextStyles.shopBtnTextStyle,
-                                    ),
-                                    error: (err) => Text(
-                                      'Sign In',
-                                      style: TextStyles.shopBtnTextStyle,
+                            actionButton(
+                              voidCallBack: () {
+                                FocusScope.of(context).unfocus();
+                                if (_formKey.currentState!.validate()) {
+                                  locator<SignInCubit>().signIn(
+                                    email: _emailController.text,
+                                    password: _passwordController.text,
+                                  );
+                                } else {
+                                  _formKey.currentState!.validate();
+                                }
+                              },
+                              child: BlocBuilder<SignInCubit, SignInState>(
+                                  builder: (context, state) {
+                                return state.when(
+                                  initial: () => buttonTxt('Sign In'),
+                                  loading: () => SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      backgroundColor:
+                                          AppTheme.appTheme(context).greyWeak,
                                     ),
                                   ),
-                                ),
-                              ),
+                                  loaded: () => buttonTxt('Sign In'),
+                                  error: (err) => buttonTxt('Sign In'),
+                                );
+                              }),
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                top: Adapt.px(30),
-                                left: Adapt.px(30),
-                                right: Adapt.px(30),
-                              ),
-                              child: InkWell(
-                                onTap: () {
-                                  Navigator.pushNamed(
-                                      context, AppRouter.signUpRoute);
-                                },
-                                child: RichText(
-                                  text: TextSpan(
-                                    style: TextStyles.standard,
-                                    children: [
-                                      const TextSpan(
-                                        text: 'Dont have an account? ',
-                                      ),
-                                      TextSpan(
-                                        text: 'Sign Up',
-                                        style: TextStyles.standard.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.orange,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
+                            switchBetweenSignInAndSignUp(
+                              title: 'Dont have an account? ',
+                              subTitle: 'Sign Up',
                             ),
                             Padding(
                               padding: EdgeInsets.only(
@@ -360,168 +185,45 @@ class _SignInViewState extends State<SignInView> {
                                 ),
                               ),
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                left: Adapt.px(30),
-                                right: Adapt.px(30),
-                                bottom: Adapt.px(30),
-                              ),
-                              child: MaterialButton(
-                                onPressed: () {
-                                  FocusScope.of(context).unfocus();
-                                  locator<GoogleSignInCubit>()
-                                      .signInwithGoogle();
+                            socialAuthButton(
+                              voidCallBack: () {
+                                FocusScope.of(context).unfocus();
+                                locator<GoogleSignInCubit>().signInwithGoogle();
+                              },
+                              child: BlocBuilder<FacebookSignInCubit,
+                                  FacebookSignInState>(
+                                builder: (context, state) {
+                                  Widget _default = socialAuthButtonChild(
+                                      imageUrl: 'images/google.png',
+                                      title: 'Google Sign In');
+                                  return state.when(
+                                    initial: () => _default,
+                                    loading: () => progressIndicator(),
+                                    loaded: () => _default,
+                                    error: (err) => _default,
+                                  );
                                 },
-                                color: AppTheme.appTheme(context).bg1,
-                                minWidth: double.infinity,
-                                height: Adapt.px(90),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(11),
-                                ),
-                                child: BlocBuilder<GoogleSignInCubit,
-                                    GoogleSignInState>(
-                                  builder: (context, state) => state.when(
-                                    initial: () => Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Image.asset(
-                                            'images/google.png',
-                                            height: Adapt.px(32),
-                                          ),
-                                          SizedBox(
-                                            width: Adapt.px(20),
-                                          ),
-                                          Text(
-                                            'Google Sign In',
-                                            style: TextStyles.subHeading,
-                                          ),
-                                        ]),
-                                    loading: () => SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        backgroundColor:
-                                            AppTheme.appTheme(context).greyWeak,
-                                      ),
-                                    ),
-                                    loaded: () => Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Image.asset(
-                                            'images/google.png',
-                                            height: Adapt.px(32),
-                                          ),
-                                          SizedBox(
-                                            width: Adapt.px(20),
-                                          ),
-                                          Text(
-                                            'Google Sign In',
-                                            style: TextStyles.subHeading,
-                                          ),
-                                        ]),
-                                    error: (err) => Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Image.asset(
-                                            'images/google.png',
-                                            height: Adapt.px(32),
-                                          ),
-                                          SizedBox(
-                                            width: Adapt.px(20),
-                                          ),
-                                          Text(
-                                            'Google Sign In',
-                                            style: TextStyles.subHeading,
-                                          ),
-                                        ]),
-                                  ),
-                                ),
                               ),
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                left: Adapt.px(30),
-                                right: Adapt.px(30),
-                                bottom: Adapt.px(30),
-                              ),
-                              child: MaterialButton(
-                                onPressed: () {
-                                  FocusScope.of(context).unfocus();
-                                  locator<FacebookSignInCubit>()
-                                      .signInWithFacebook();
+                            socialAuthButton(
+                              voidCallBack: () {
+                                FocusScope.of(context).unfocus();
+                                locator<FacebookSignInCubit>()
+                                    .signInWithFacebook();
+                              },
+                              child: BlocBuilder<FacebookSignInCubit,
+                                  FacebookSignInState>(
+                                builder: (context, state) {
+                                  Widget _default = socialAuthButtonChild(
+                                      imageUrl: 'images/facebook.png',
+                                      title: 'Facebook Sign In');
+                                  return state.when(
+                                    initial: () => _default,
+                                    loading: () => progressIndicator(),
+                                    loaded: () => _default,
+                                    error: (err) => _default,
+                                  );
                                 },
-                                color: AppTheme.appTheme(context).bg1,
-                                minWidth: double.infinity,
-                                height: Adapt.px(90),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(11),
-                                ),
-                                child: BlocBuilder<FacebookSignInCubit,
-                                    FacebookSignInState>(
-                                  builder: (context, state) => state.when(
-                                    initial: () => Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Image.asset(
-                                            'images/facebook.png',
-                                            height: Adapt.px(32),
-                                          ),
-                                          SizedBox(
-                                            width: Adapt.px(20),
-                                          ),
-                                          Text(
-                                            'Facebook Sign In',
-                                            style: TextStyles.subHeading,
-                                          ),
-                                        ]),
-                                    loading: () => SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        backgroundColor:
-                                            AppTheme.appTheme(context).greyWeak,
-                                      ),
-                                    ),
-                                    loaded: () => Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Image.asset(
-                                            'images/facebook.png',
-                                            height: Adapt.px(32),
-                                          ),
-                                          SizedBox(
-                                            width: Adapt.px(20),
-                                          ),
-                                          Text(
-                                            'Facebook Sign In',
-                                            style: TextStyles.subHeading,
-                                          ),
-                                        ]),
-                                    error: (err) => Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Image.asset(
-                                            'images/facebook.png',
-                                            height: Adapt.px(32),
-                                          ),
-                                          SizedBox(
-                                            width: Adapt.px(20),
-                                          ),
-                                          Text(
-                                            'Facebook Sign In',
-                                            style: TextStyles.subHeading,
-                                          ),
-                                        ]),
-                                  ),
-                                ),
                               ),
                             ),
                           ],
