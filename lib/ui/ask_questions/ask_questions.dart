@@ -38,11 +38,11 @@ class _AskQuestionsPageState extends State<AskQuestionsPage>
     return DrawerWraper(
       animationController: _animationController,
       page: Scaffold(
-        backgroundColor: Color(0xFFEFEFEF),
+        backgroundColor: Color(0xFFF3F3F5),
         appBar: AppBar(
           elevation: 0,
           leadingWidth: Adapt.px(100),
-          backgroundColor: Color(0xFFEFEFEF),
+          backgroundColor: Color(0xFFF3F3F5),
           centerTitle: true,
           title: Text(
             'Ask Questions',
@@ -152,8 +152,11 @@ class _AskQuestionsPageState extends State<AskQuestionsPage>
         body: ListView.builder(
             itemCount: 10,
             itemBuilder: (BuildContext context, int index) {
-              return QuestionCard(
-                index: index,
+              return Container(
+                color: Color(0xFFF3F3F5),
+                child: QuestionCard(
+                  index: index,
+                ),
               );
             }),
       ),

@@ -35,7 +35,7 @@ Widget textField(
           keyboardType: icon == Icons.mail
               ? TextInputType.emailAddress
               : TextInputType.visiblePassword,
-          obscureText: true,
+          obscureText: icon == Icons.lock,
           controller: controller,
           decoration: InputDecoration(
             prefixIcon: Icon(
@@ -225,10 +225,5 @@ Widget progressIndicator() {
 void onError(String error, void func, BuildContext context) => (error) {
       final snackBar = SnackBar(content: Text(error));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      func as Function;
-    };
-
-void onLoaded(void func) => (error, BuildContext context) {
-      Navigator.pushReplacementNamed(context, AppRouter.learnRoute);
       func as Function;
     };

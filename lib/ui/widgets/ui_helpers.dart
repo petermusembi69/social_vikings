@@ -15,7 +15,7 @@ appBar(AnimationController animationController, String title) {
   return AppBar(
     elevation: 0,
     leadingWidth: Adapt.px(100),
-    backgroundColor: Color(0xFFEFEFEF),
+    backgroundColor: Color(0xFFF3F3F5),
     centerTitle: true,
     title: Text(
       title,

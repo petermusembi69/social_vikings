@@ -86,27 +86,39 @@ class _SignInViewState extends State<SignInView> {
       listener: (context, state) => state.when(
         initial: () {},
         loading: () {},
-        loaded: () => onLoaded(locator<SignInCubit>().reset()),
-        error: (error) =>
-            onError(error, locator<SignInCubit>().reset(), context),
+        loaded: () =>
+            Navigator.pushReplacementNamed(context, AppRouter.learnRoute),
+        error: (error) {
+          final snackBar = SnackBar(content: Text(error));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          locator<SignInCubit>().reset();
+        },
       ),
       builder: (context, state) {
         return BlocConsumer<FacebookSignInCubit, FacebookSignInState>(
           listener: (context, state) => state.when(
             initial: () {},
             loading: () {},
-            loaded: () => onLoaded(locator<FacebookSignInCubit>().reset()),
-            error: (error) =>
-                onError(error, locator<FacebookSignInCubit>().reset(), context),
+            loaded: () =>
+                Navigator.pushReplacementNamed(context, AppRouter.learnRoute),
+            error: (error) {
+              final snackBar = SnackBar(content: Text(error));
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              locator<FacebookSignInCubit>().reset();
+            },
           ),
           builder: (context, state) {
             return BlocConsumer<GoogleSignInCubit, GoogleSignInState>(
               listener: (context, state) => state.when(
                 initial: () {},
                 loading: () {},
-                loaded: () => onLoaded(locator<GoogleSignInCubit>().reset()),
-                error: (error) => onError(
-                    error, locator<FacebookSignInCubit>().reset(), context),
+                loaded: () => Navigator.pushReplacementNamed(
+                    context, AppRouter.learnRoute),
+                error: (error) {
+                  final snackBar = SnackBar(content: Text(error));
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  locator<FacebookSignInCubit>().reset();
+                },
               ),
               builder: (context, state) {
                 return Scaffold(
@@ -190,8 +202,8 @@ class _SignInViewState extends State<SignInView> {
                                 FocusScope.of(context).unfocus();
                                 locator<GoogleSignInCubit>().signInwithGoogle();
                               },
-                              child: BlocBuilder<FacebookSignInCubit,
-                                  FacebookSignInState>(
+                              child: BlocBuilder<GoogleSignInCubit,
+                                  GoogleSignInState>(
                                 builder: (context, state) {
                                   Widget _default = socialAuthButtonChild(
                                       imageUrl: 'images/google.png',

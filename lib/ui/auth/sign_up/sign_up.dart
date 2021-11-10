@@ -67,8 +67,11 @@ class _SignUpViewState extends State<SignUpView> {
           Navigator.popAndPushNamed(context, AppRouter.learnRoute);
           locator.resetLazySingleton<SignUpCubit>();
         },
-        error: (error) =>
-            onError(error, locator<SignUpCubit>().reset(), context),
+        error: (error) {
+          final snackBar = SnackBar(content: Text(error));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          locator<SignUpCubit>().reset();
+        },
       ),
       builder: (context, state) {
         return Scaffold(

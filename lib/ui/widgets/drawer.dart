@@ -25,29 +25,45 @@ class _DrawerDataState extends State<DrawerData> {
     final List<DrawerItem> drawer = [
       DrawerItem(
           'Learn',
-          Icons.account_circle,
+          Icon(
+            Icons.school,
+            color: Color(0xff0189CD),
+          ),
           () => Navigator.pushNamedAndRemoveUntil(
               context, AppRouter.learnRoute, (Route<dynamic> route) => false)),
       DrawerItem(
           'Ask a question',
-          Icons.message,
+          Icon(
+            Icons.contact_support,
+            color: Color(0xffE11B22),
+          ),
           () => Navigator.pushNamedAndRemoveUntil(context,
               AppRouter.askQuestionsRoute, (Route<dynamic> route) => false)),
       DrawerItem(
           'Inbox',
-          Icons.compare_arrows,
+          Icon(
+            Icons.message,
+            color: Color(0xff488F43),
+          ),
           () => Navigator.pushNamedAndRemoveUntil(
               context, AppRouter.inboxRoute, (Route<dynamic> route) => false)),
       DrawerItem(
           'Privacy Policy',
-          Icons.bookmark,
+          Icon(
+            Icons.verified_user,
+            color: Color(0xffE8711F),
+          ),
           () => Navigator.pushNamedAndRemoveUntil(context,
               AppRouter.privacyPolicyRoute, (Route<dynamic> route) => false)),
-      DrawerItem('logOut', Icons.exit_to_app, () async {
+      DrawerItem(
+          'logOut',
+          Icon(
+            Icons.exit_to_app,
+            color: Color(0xffF3D400),
+          ), () async {
         await locator<AuthService>().signOut();
         locator<HiveService>().clearPrefs();
-        Navigator.pushNamedAndRemoveUntil(
-            context, AppRouter.intialRoute, (Route<dynamic> route) => false);
+        Navigator.popAndPushNamed(context, AppRouter.intialRoute);
       }),
     ];
     return Padding(
@@ -154,10 +170,7 @@ class _DrawerDataState extends State<DrawerData> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Icon(
-                            drawer[index].icon,
-                            color: Colors.white,
-                          ),
+                          child: drawer[index].icon,
                         ),
                         Padding(
                           padding: const EdgeInsets.all(12.0),

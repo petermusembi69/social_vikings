@@ -32,7 +32,7 @@ class _PrivacyPolicyState extends State<PrivacyPolicy>
     return DrawerWraper(
       animationController: _animationController,
       page: Scaffold(
-        backgroundColor: Color(0xFFEFEFEF),
+        backgroundColor: Color(0xFFF3F3F5),
         appBar: appBar(_animationController, 'Privacy Policy'),
         body: SingleChildScrollView(
           child: SizedBox(

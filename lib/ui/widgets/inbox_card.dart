@@ -27,14 +27,14 @@ class _InboxCardState extends State<InboxCard> {
                 children: [
                   Expanded(
                     child: Container(
-                      color: Colors.orange,
+                      color: Color(0xffFFB339),
                       height: Adapt.px(150),
                     ),
                   ),
                   Expanded(
                     child: Container(
                       height: Adapt.px(150),
-                      color: Colors.red,
+                      color: Color(0xffFF3939),
                     ),
                   ),
                 ],
@@ -43,6 +43,10 @@ class _InboxCardState extends State<InboxCard> {
                 borderRadius: BorderRadius.all(Radius.circular(20)),
                 child: Container(
                   height: Adapt.px(150),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white,
+                  ),
                   child: ListTile(
                     tileColor: Colors.white,
                     trailing: widget.index % 2 == 0
@@ -112,7 +116,7 @@ class _InboxCardState extends State<InboxCard> {
           ),
           actions: <Widget>[
             IconSlideAction(
-              color: Colors.orange,
+              color: Color(0xffFFB339),
               icon: Icons.star,
               foregroundColor: Colors.white,
               onTap: () => {},
@@ -120,7 +124,7 @@ class _InboxCardState extends State<InboxCard> {
           ],
           secondaryActions: <Widget>[
             IconSlideAction(
-              color: Colors.red,
+              color: Color(0xffFF3939),
               icon: Icons.delete,
               onTap: () => {},
             ),

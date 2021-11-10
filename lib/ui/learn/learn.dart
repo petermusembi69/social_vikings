@@ -59,11 +59,11 @@ class _LearnViewState extends State<LearnView>
     return DrawerWraper(
       animationController: _animationController,
       page: Scaffold(
-        backgroundColor: Color(0xFFEFEFEF),
+        backgroundColor: Color(0xFFF3F3F5),
         appBar: AppBar(
           elevation: 0,
           leadingWidth: Adapt.px(120),
-          backgroundColor: Color(0xFFEFEFEF),
+          backgroundColor: Color(0xFFF3F3F5),
           title: Text(
             'Learn Media',
             style: TextStyles.appBarTextStyle,
@@ -113,7 +113,7 @@ class _LearnViewState extends State<LearnView>
                             color: Color(0xFFFFFFFF),
                             darkColor: Color(0xFF636366),
                           ),
-                          thumbColor: Color(0xFFEFEFEF),
+                          thumbColor: Color(0xFFF3F3F5),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(
