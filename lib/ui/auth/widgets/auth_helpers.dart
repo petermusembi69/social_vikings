@@ -73,7 +73,7 @@ Widget actionButton({
     ),
     child: MaterialButton(
       onPressed: voidCallBack,
-      color: Colors.orange,
+      color: Color(0xffFFB339),
       minWidth: double.infinity,
       height: Adapt.px(90),
       shape: RoundedRectangleBorder(
@@ -115,7 +115,7 @@ Widget switchBetweenSignInAndSignUp({
                 text: subTitle,
                 style: TextStyles.standard.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: Colors.orange,
+                  color: Color(0xffFFB339),
                 ),
               ),
             ],
