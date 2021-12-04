@@ -128,6 +128,7 @@ class AuthServiceImpl implements AuthService {
         password: signInDTO.password,
       );
       final user = userCredential.user;
+      Logger().d('user: $user');
       if (user != null) {
         assert(!user.isAnonymous);
         assert(user.email != null);
